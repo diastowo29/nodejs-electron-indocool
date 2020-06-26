@@ -31,6 +31,6 @@ module.exports = (sequelize, type) => {
         hse: type.STRING(510),
         productivity: type.STRING(510),
         fix: type.STRING(510),
-        overtime: type.STRING(510),
+        overtime: type.STRING(510)
     })
 }

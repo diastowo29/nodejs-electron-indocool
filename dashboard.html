@@ -26,6 +26,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link href="./assets/styles/toastr.css" rel="stylesheet"/>
+    <script src="./assets/scripts/toastr.js"></script>
     <style type="text/css">
         
         .input-group {
@@ -35,6 +37,11 @@
         .checkbox-dts {
             padding-top: 20px;
         }
+
+        .label_hide {
+            visibility: hidden;
+        }
+
     </style>
 </head>
 <body>
@@ -464,12 +471,18 @@
                             <li>
                                 <a href="#" id="emp_master">
                                     <i class="metismenu-icon pe-7s-rocket"></i>
-                                    Employee Master
+                                    New Employee
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" id="emp_list">
+                                    <i class="metismenu-icon pe-7s-rocket"></i>
+                                    List Employee
                                 </a>
                             </li>
                             <li class="app-sidebar__heading">Data Input</li>
                             <li>
-                                <a href="tables-regular.html">
+                                <a href="#" id="fingerprint_master">
                                     <i class="metismenu-icon pe-7s-display2"></i>
                                     Fingerprint Master
                                 </a>
@@ -487,7 +500,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="tables-regular.html">
+                                <a href="#">
                                     <i class="metismenu-icon pe-7s-display2"></i>
                                     PPH 21 (Coming Soon)
                                 </a>
@@ -514,31 +527,31 @@
                     </div>
                     <div class="row dts_container">
                         <div class="col-md-6">
-                            <label for="emp_id" class="">Employee ID</label>
-                            <input name="emp_id" id="emp_id" placeholder="290" type="username" class="form-control">
+                            <label for="dts_emp_id" class="">Employee ID</label>
+                            <input name="dts_emp_id" id="dts_emp_id" placeholder="290" type="username" class="form-control">
                         </div>
                         <div class="col-md-6">
-                            <label for="emp_name" class="">Employee Name</label>
-                            <input name="emp_name" id="emp_name" placeholder="Name" type="name" class="form-control" disabled="true">
+                            <label for="dts_emp_name" class="">Employee Name</label>
+                            <input name="dts_emp_name" id="dts_emp_name" placeholder="Name" type="name" class="form-control" disabled="true">
                         </div>
                         <div class="col-md-6">
-                            <label for="dts_date" class="">DTS Date</label>
+                            <label for="dts_dts_date" class="">DTS Date</label>
                             <input name="dts_date" id="dts_date" placeholder="" type="date" class="form-control">
                         </div>
-                        <div class="col-md-6">
-                            <label for="dts_start" class="">Start Working Hour</label>
+                        <div class="col-md-3">
+                            <label for="dts_dts_start" class="">Start Working Hour</label>
                             <input name="dts_start" id="dts_start" placeholder="" type="time" class="form-control">
                         </div>
-                        <div class="col-md-6">
-                            <label for="dts_number" class="">Job Number</label>
-                            <input name="dts_number" id="dts_number" placeholder="2940" type="id" class="form-control">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="dts_finish" class="">Finish Working Hour</label>
+                        <div class="col-md-3">
+                            <label for="dts_dts_finish" class="">Finish Working Hour</label>
                             <input name="dts_finish" id="dts_finish" placeholder="" type="time" class="form-control">
                         </div>
                         <div class="col-md-6">
-                            <label for="dts_desc" class="">Job Description</label>
+                            <label for="dts_dts_number" class="">Job Number</label>
+                            <input name="dts_number" id="dts_number" placeholder="2940" type="id" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="dts_dts_desc" class="">Job Description</label>
                             <input name="dts_desc" id="dts_desc" placeholder="Description" type="description" class="form-control">
                         </div>
                         <div class="col-md-6">
@@ -572,6 +585,60 @@
 
 
 
+                    <div class="row emplist_container">
+                        <div class="col-md-12">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nama</th>
+                                        <th>NIK</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="emp_list_tbody">
+                                    <tr>
+                                        <td>123</td>
+                                        <td>123</td>
+                                        <td>123</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row fingerprint_container">
+                        <div class="col-md-6">
+                            <label>Attach File</label>
+                            <input name="fp_csv" id="fp_csv" placeholder="" type="file" class="form-control-file">
+                        </div>
+                        <div class="col-md-3">
+                            <label>Fingerprint Date </label>
+                            <input name="fp_date" id="fp_date" placeholder="" type="date" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="label_hide">upload</label>
+                            <input type="button" value="Upload" class="btn btn-primary form-control">
+                        </div>
+                        <div class="col-md-12">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Entry</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="emp_list_tbody">
+                                    <tr>
+                                        <td>02-12-2020</td>
+                                        <td>149</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
 
 
                     <div class="row emp_container">
@@ -582,42 +649,42 @@
                                 <option value="balikpapan">Balikpapan</option>
                             </select>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <label for="emp_status">Employee Status</label>
                             <select class="form-control" id="emp_status">
                                 <option value="daily">Daily Worker</option>
                                 <option value="employee">Employee</option>
                             </select>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <label for="emp_id" class="">Employee Number</label>
-                            <input name="emp_id" id="emp_id" placeholder="290" type="username" class="form-control" disabled="true">
+                            <input name="emp_id" id="emp_id" placeholder="290" type="id" class="form-control" disabled="true">
                         </div>
                         <div class="col-md-6">
                             <label for="emp_name" class="">Employee Name</label>
                             <input name="emp_name" id="emp_name" placeholder="Name" type="name" class="form-control">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <label for="birth_place" class="">Place of Birth (City)</label>
                             <input name="birth_place" id="birth_place" placeholder="Bogor" type="address" class="form-control">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <label for="birth_date" class="">Date of Birth</label>
                             <input name="birth_date" id="birth_date" placeholder="" type="date" class="form-control">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <label for="nik" class="">NIK</label>
                             <input name="nik" id="nik" placeholder="32013709384345" type="number" class="form-control">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <label for="kk_number" class="">KK Number</label>
                             <input name="kk_number" id="kk_number" placeholder="32013709384345" type="number" class="form-control">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <label for="npwp" class="">NPWP Number</label>
                             <input name="npwp" id="npwp" placeholder="12982304212453" type="number" class="form-control">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <label for="marital_status">Marital Status:</label>
                             <select class="form-control" id="marital_status">
                                 <option value="tk0">TK</option>
@@ -634,7 +701,7 @@
                             <label for="mother_name" class="">Mother Name</label>
                             <input name="mother_name" id="mother_name" placeholder="Name" type="name" class="form-control">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-2">
                             <label for="blood_type" class="">Blood Type</label>
                             <select class="form-control" id="blood_type">
                                 <option value="a">A</option>
@@ -643,7 +710,7 @@
                                 <option value="o">o</option>
                             </select>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="bpjs_tk" class="">BPJS Ketenagakerjaan</label>
                             <input name="bpjs_tk" id="bpjs_tk" placeholder="12982304212453" type="number" class="form-control">
                         </div>
@@ -659,11 +726,11 @@
                             <label for="email" class="">Email Address</label>
                             <input name="email" id="email" placeholder="brownfox@gmail.com" type="email" class="form-control">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <label for="phone" class="">Phone Number</label>
                             <input name="phone" id="phone" placeholder="081292xxx" type="phone" class="form-control">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <label for="division" class="">Division</label>
                             <select class="form-control" id="division">
                                 <option value="office">Office</option>
@@ -672,15 +739,15 @@
                                 <option value="production">Production</option>
                             </select>
                         </div>
-                        <div class="col-md-12"></div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <label for="join_date" class="">Join Date</label>
                             <input name="join_date" id="join_date" placeholder="" type="date" class="form-control">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="job_pos" class="">Job Position</label>
                             <input name="job_pos" id="job_pos" placeholder="Position" type="description" class="form-control">
                         </div>
+                        <div class="col-md-12"></div>
                         <div class="col-md-6">
                             <label for="basic_salary" class="">Basic Salary (Rp)</label>
                             <input name="basic_salary" id="basic_salary" placeholder="5,000,000" type="number" class="form-control">
@@ -718,7 +785,7 @@
                             <input name="overtime" id="overtime" placeholder="5,000,000" type="number" class="form-control">
                         </div>
                         <div class="col-md-12">
-                            <button class="btn btn-primary">Save</button>
+                            <button class="btn btn-primary" onclick="createEmployee()">Save</button>
                         </div>
                     </div>
                     <!-- <div class="row">
@@ -862,18 +929,43 @@
     const remote = require('electron').remote
     var ipcRenderer = require('electron').ipcRenderer;
 
+    var toastr = require('toastr');
+
     $('.emp_container').hide();
-    $('.dts_container').show();
+    $('.dts_container').hide();
+    $('.emplist_container').hide();
+    $('.fingerprint_container').show();
 
     $('#emp_master').click( function() {
         $('.emp_container').show();
         $('.dts_container').hide();
+        $('.emplist_container').hide();
+        $('.fingerprint_container').hide();
+        return false;
+    });
+
+    $('#fingerprint_master').click( function () {
+        $('.emp_container').hide();
+        $('.dts_container').hide();
+        $('.emplist_container').hide();
+        $('.fingerprint_container').show();
+        return false; 
+    })
+
+    $('#emp_list').click( function() {
+        $('.dts_container').hide();
+        $('.emp_container').hide();
+        $('.emplist_container').show();
+        $('.fingerprint_container').hide();
+        ipcRenderer.send('employee_list', true);
         return false;
     });
 
     $('#input_dts').click( function() {
         $('.dts_container').show();
         $('.emp_container').hide();
+        $('.fingerprint_container').hide();
+        $('.emplist_container').hide();
         return false;
     });
 
@@ -885,5 +977,53 @@
         }
     });
 
+    function createEmployee () {
+        var employeeData = {
+            working_domicile: $('#work_domicile').val(),
+            employee_status: $('#emp_status').val(),
+            employee_name: $('#emp_name').val(),
+            place_of_birth: $('#birth_place').val(),
+            date_of_birth: $('#birth_date').val(),
+            nik: $('#nik').val(),
+            kk: $('#kk_number').val(),
+            npwp: $('#npwp').val(),
+            marital_status: $('#marital_status').val(),
+            mother_name: $('#mother_name').val(),
+            bpjs_tk: $('#bpjs_tk').val(),
+            bpjs_ks: $('#bpjs_ks').val(),
+            address: $('#address').val(),
+            email_address: $('#email').val(),
+            phone_number: $('#phone').val(),
+            division: $('#division').val(),
+            join_date: $('#join_date').val(),
+            job_position: $('#job_pos').val(),
+            basic_salary: $('#basic_salary').val(),
+            meal: $('#meal').val(),
+            transport: $('#transport').val(),
+            attendance: $('#attendance').val(),
+            ontime: $('#ontime').val(),
+            hse: $('#hse').val(),
+            productivity: $('#productivity').val(),
+            fix: $('#fix').val(),
+            overtime: $('#overtime').val(),
+        }
+        ipcRenderer.send('create_employee', employeeData);
+    }
+
+    ipcRenderer.on('update_finish', function (event, data) {
+        if (data) {
+            toastr.success('Update data success..');
+        } else {
+            toastr.error('NIK already exist..');
+        }
+    });
+
+    ipcRenderer.on('employee_list', function (event, data) {
+        if (data.length > 0) {
+            for (var i=0; i<data.length; i++) {
+                console.log(data[i])
+            }
+        }
+    });
 </script>
 </html>

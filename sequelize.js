@@ -26,7 +26,14 @@ const employee_table = employeeModel(sequelize_db, Sequelize)
 sequelize_db.sync()
   .then(() => {
     console.log(`Database & tables created!`)
+    employee_table.findAll({
+    	where: {
+    		id: 1
+    	}
+    }).then(employee_table_find => {
+    	console.log(employee_table_find.length);
     })
+})
 
 module.exports = {
     employee_table
