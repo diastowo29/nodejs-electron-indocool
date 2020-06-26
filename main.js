@@ -1,22 +1,30 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow} = require('electron')
 const path = require('path')
+const ipcMain = require('electron').ipcMain;
+const { employee_table } = require('./sequelize')
+const Sequelize = require('sequelize')
+
+var mainWindow;
+// console.log(process.env.PATH)
 
 function createWindow () {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+  mainWindow = new BrowserWindow({
+    width: 1200,
+    height: 800,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true
     }
   })
 
   // and load the index.html of the app.
   mainWindow.loadFile('index.html')
+  // mainWindow.loadFile(path.join(__dirname, 'index.html'));
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished
@@ -38,6 +46,18 @@ app.whenReady().then(() => {
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })
+
+ipcMain.on('do_login', function(event, data) {
+  mainWindow.loadFile('dashboard.html')
+});
+
+ipcMain.on('emp_master', function(event, data) {
+  console.log('emp')
+});
+
+ipcMain.on('input_dts', function(event, data) {
+
+});
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
