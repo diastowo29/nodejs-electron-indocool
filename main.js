@@ -52,18 +52,28 @@ ipcMain.on('emp_master', function(event, data) {
 });
 
 ipcMain.on('save_dts', function(event, data) {
-  var dtsElement = {
-    dts_job_number: data.dts_job_number,
-    dts_date: data.dts_date,
-    dts_start: data.dts_start,
-    dts_finish: data.dts_finish,
-    dts_workday: data.dts_workday
-  }
   dts_table.create(data).then(dts_table_create => {
+    var dtsElement = {
+      dts_job_number: data.dts_job_number,
+      dts_date: data.dts_date,
+      dts_start: data.dts_start,
+      dts_finish: data.dts_finish,
+      dts_workday: data.dts_workday,
+      dts_job_id: dts_table_create.dataValues.id
+    }
     mainWindow.webContents.send('save_dts', dtsElement);
   })
-
 });
+
+ipcMain.on('delete_dts', function(event, data) {
+  dts_table.destroy({
+    where: {
+      id: data
+    }
+  }).then(dts_table_destroy => {
+    mainWindow.webContents.send('delete_dts', data);
+  })
+})
 
 ipcMain.on('create_mainfp', function(event, data) {
   var mainfp_element = {
@@ -83,7 +93,7 @@ ipcMain.on('create_mainfp', function(event, data) {
       })
     }
   })
-})
+});
 
 ipcMain.on('mainfp_menu', function(event, data) {
   mainfp_table.findAll().then(mainfp_table_find => {
@@ -97,8 +107,6 @@ ipcMain.on('dts_menu', function(event, data) {
     mainWindow.webContents.send('dts_menu', employee_table_find);
   });
 });
-
-
 
 ipcMain.on('employee_menu', function(event, data) {
   employee_table.findAll().then(employee_table_find => {
@@ -121,7 +129,7 @@ ipcMain.on('create_employee', function (event, data) {
       })
     }
   })
-})
+});
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
