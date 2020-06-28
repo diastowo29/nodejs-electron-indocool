@@ -1,5 +1,7 @@
 const Sequelize = require('sequelize')
 const employeeModel = require('./models/employee')
+const mainfpModel = require('./models/main_fp')
+const dtsModel = require('./models/dts')
 
 var sequelize_db;
 
@@ -22,6 +24,8 @@ if (process.env.DATABASE_URL === undefined) {
 }
 
 const employee_table = employeeModel(sequelize_db, Sequelize)
+const mainfp_table = mainfpModel(sequelize_db, Sequelize)
+const dts_table = dtsModel(sequelize_db, Sequelize)
 
 sequelize_db.sync()
   .then(() => {
@@ -36,5 +40,7 @@ sequelize_db.sync()
 })
 
 module.exports = {
-    employee_table
+    employee_table,
+    mainfp_table,
+    dts_table
 }

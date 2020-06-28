@@ -2,7 +2,10 @@
 const {app, BrowserWindow} = require('electron')
 const path = require('path')
 const ipcMain = require('electron').ipcMain;
-const { employee_table } = require('./sequelize')
+const { employee_table, 
+  mainfp_table,
+  dts_table } = require('./sequelize')
+
 const Sequelize = require('sequelize')
 
 var mainWindow;
@@ -48,14 +51,59 @@ ipcMain.on('emp_master', function(event, data) {
   console.log('emp')
 });
 
-ipcMain.on('input_dts', function(event, data) {
+ipcMain.on('save_dts', function(event, data) {
+  var dtsElement = {
+    dts_job_number: data.dts_job_number,
+    dts_date: data.dts_date,
+    dts_start: data.dts_start,
+    dts_finish: data.dts_finish,
+    dts_workday: data.dts_workday
+  }
+  dts_table.create(data).then(dts_table_create => {
+    mainWindow.webContents.send('save_dts', dtsElement);
+  })
 
 });
 
-ipcMain.on('employee_list', function(event, data) {
-  employee_table.findAll().then(employee_table_find => {
-    mainWindow.webContents.send('employee_list', employee_table_find);
+ipcMain.on('create_mainfp', function(event, data) {
+  var mainfp_element = {
+    fp_date: data.fp_date,
+    fp_count: data.fp_count
+  }
+  mainfp_table.findAll({
+    where: {
+      fp_date: data.fp_date + ' 00:00:00'
+    }
+  }).then(mainfp_table_find => {
+    if (mainfp_table_find.length > 0) {
+      mainWindow.webContents.send('mainfp_failed', false);
+    } else {
+      mainfp_table.create(data).then(mainfp_table_create => {
+        mainWindow.webContents.send('mainfp_finish', mainfp_element);
+      })
+    }
   })
+})
+
+ipcMain.on('mainfp_menu', function(event, data) {
+  mainfp_table.findAll().then(mainfp_table_find => {
+    console.log(mainfp_table_find)
+    mainWindow.webContents.send('mainfp_menu', mainfp_table_find);
+  });
+});
+
+ipcMain.on('dts_menu', function(event, data) {
+  employee_table.findAll().then(employee_table_find => {
+    mainWindow.webContents.send('dts_menu', employee_table_find);
+  });
+});
+
+
+
+ipcMain.on('employee_menu', function(event, data) {
+  employee_table.findAll().then(employee_table_find => {
+    mainWindow.webContents.send('employee_menu', employee_table_find);
+  });
 });
 
 ipcMain.on('create_employee', function (event, data) {

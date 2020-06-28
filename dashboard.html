@@ -28,6 +28,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link href="./assets/styles/toastr.css" rel="stylesheet"/>
     <script src="./assets/scripts/toastr.js"></script>
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/xlsx.full.min.js"></script> -->
     <style type="text/css">
         
         .input-group {
@@ -40,6 +41,11 @@
 
         .label_hide {
             visibility: hidden;
+        }
+
+        .edit-image {
+            margin-top: 5px;
+            margin-left: 10px;
         }
 
     </style>
@@ -528,35 +534,40 @@
                     <div class="row dts_container">
                         <div class="col-md-6">
                             <label for="dts_emp_id" class="">Employee ID</label>
-                            <input name="dts_emp_id" id="dts_emp_id" placeholder="290" type="username" class="form-control">
+                            <!-- <input name="dts_emp_id" id="dts_emp_id" placeholder="290" type="username" class="form-control"> -->
+                            <select class="form-control" id="dts_emp_id" onchange="dts_emp_id_change()">
+                                <!-- <option value="1">Weekday</option>
+                                <option value="2">Weekend</option>
+                                <option value="3">Public Holiday</option> -->
+                            </select>
                         </div>
                         <div class="col-md-6">
                             <label for="dts_emp_name" class="">Employee Name</label>
                             <input name="dts_emp_name" id="dts_emp_name" placeholder="Name" type="name" class="form-control" disabled="true">
                         </div>
                         <div class="col-md-6">
-                            <label for="dts_dts_date" class="">DTS Date</label>
+                            <label for="dts_date" class="">DTS Date</label>
                             <input name="dts_date" id="dts_date" placeholder="" type="date" class="form-control">
                         </div>
                         <div class="col-md-3">
-                            <label for="dts_dts_start" class="">Start Working Hour</label>
+                            <label for="dts_start" class="">Start Working Hour</label>
                             <input name="dts_start" id="dts_start" placeholder="" type="time" class="form-control">
                         </div>
                         <div class="col-md-3">
-                            <label for="dts_dts_finish" class="">Finish Working Hour</label>
+                            <label for="dts_finish" class="">Finish Working Hour</label>
                             <input name="dts_finish" id="dts_finish" placeholder="" type="time" class="form-control">
                         </div>
                         <div class="col-md-6">
-                            <label for="dts_dts_number" class="">Job Number</label>
-                            <input name="dts_number" id="dts_number" placeholder="2940" type="id" class="form-control">
+                            <label for="dts_job_number" class="">Job Number</label>
+                            <input name="dts_job_number" id="dts_job_number" placeholder="2940" type="id" class="form-control">
                         </div>
                         <div class="col-md-6">
-                            <label for="dts_dts_desc" class="">Job Description</label>
-                            <input name="dts_desc" id="dts_desc" placeholder="Description" type="description" class="form-control">
+                            <label for="dts_job_desc" class="">Job Description</label>
+                            <input name="dts_job_desc" id="dts_job_desc" placeholder="Description" type="description" class="form-control">
                         </div>
                         <div class="col-md-6">
-                            <label for="sel1">Working Day</label>
-                            <select class="form-control" id="sel1">
+                            <label for="dts_workday">Working Day</label>
+                            <select class="form-control" id="dts_workday">
                                 <option value="1">Weekday</option>
                                 <option value="2">Weekend</option>
                                 <option value="3">Public Holiday</option>
@@ -564,22 +575,42 @@
                         </div>
                         <div class="col-md-6 checkbox-dts">
                             <div class="col-md-4">
-                                <label><input type="checkbox" value=""> Meals</label>
-                                <label><input type="checkbox" value=""> Transport</label>
+                                <label><input type="checkbox" id="dts_meal" value=""> Meals</label>
+                                <label><input type="checkbox" id="dts_transport" value=""> Transport</label>
                             </div>
                             <div class="col-md-4">
-                                <label><input type="checkbox" value=""> Attendance</label>
-                                <label><input type="checkbox" value=""> On Time</label>
+                                <label><input type="checkbox" id="dts_attendance" value=""> Attendance</label>
+                                <label><input type="checkbox" id="dts_ontime" value=""> On Time</label>
                             </div>
                             <div class="col-md-4">
-                                <label><input type="checkbox" value=""> Production</label>
-                                <label><input type="checkbox" value=""> Housing</label>
-                                <label><input type="checkbox" value=""> Away</label>
+                                <label><input type="checkbox" id="dts_production" value=""> Production</label>
+                                <label><input type="checkbox" id="dts_housing" value=""> Housing</label>
+                                <label><input type="checkbox" id="dts_away" value=""> Away</label>
                             </div>
                         </div>
-                        <div class="col-md-12">
-                            <button class="btn btn-primary">Finish</button>
-                            <button class="btn btn-primary">Save & Input another Job</button>
+                        <div class="col-md-6">
+                            <button class="btn btn-primary" onclick="dtsFinish()">Finish</button>
+                            <button class="btn btn-primary" onclick="dtsSave()">Save & Input another Job</button>
+                        </div>
+                        <div class="col-md-12" style="margin-top: 20px;"></div>
+                        <div class="col-md-8">
+                            <table class="table">
+                                <tr>
+                                    <th>Job Number</th>
+                                    <th>Date</th>
+                                    <th>Start</th>
+                                    <th>Finish</th>
+                                    <th>Working Day</th>
+                                    <th>Action</th>
+                                </tr>
+                                <tr>
+                                    <td>123</td>
+                                    <td>20/06/2020</td>
+                                    <td>12:00</td>
+                                    <td>13:00</td>
+                                    <td>Holiday</td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
 
@@ -587,21 +618,15 @@
 
                     <div class="row emplist_container">
                         <div class="col-md-12">
-                            <table class="table">
+                            <table class="table" id="emp_list_table">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
                                         <th>Nama</th>
                                         <th>NIK</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody id="emp_list_tbody">
-                                    <tr>
-                                        <td>123</td>
-                                        <td>123</td>
-                                        <td>123</td>
-                                    </tr>
-                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -619,22 +644,16 @@
                         </div>
                         <div class="col-md-3">
                             <label class="label_hide">upload</label>
-                            <input type="button" value="Upload" class="btn btn-primary form-control">
+                            <input type="button" value="Upload" class="btn btn-primary form-control" onclick="UploadFp()">
                         </div>
                         <div class="col-md-12">
-                            <table class="table">
+                            <table class="table" id="fp_list_table">
                                 <thead>
                                     <tr>
                                         <th>Date</th>
                                         <th>Entry</th>
                                     </tr>
                                 </thead>
-                                <tbody id="emp_list_tbody">
-                                    <tr>
-                                        <td>02-12-2020</td>
-                                        <td>149</td>
-                                    </tr>
-                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -924,17 +943,27 @@
             </div>
         </div>
     </div>
-<script type="text/javascript" src="./assets/scripts/main.js"></script></body>
+<script type="text/javascript" src="./assets/scripts/main.js"></script>
+    <script lang="javascript" src="node_modules/xlsx/dist/xlsx.core.min.js"></script>
+<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/jszip.js"></script> -->
+</body>
 <script type="text/javascript">
     const remote = require('electron').remote
     var ipcRenderer = require('electron').ipcRenderer;
 
     var toastr = require('toastr');
+    var XLSX = require('xlsx');
+
+    var fp_json;
+    var fp_count;
+    var fp_date;
+
+    var empNameList = [];
 
     $('.emp_container').hide();
-    $('.dts_container').hide();
+    $('.dts_container').show();
     $('.emplist_container').hide();
-    $('.fingerprint_container').show();
+    $('.fingerprint_container').hide();
 
     $('#emp_master').click( function() {
         $('.emp_container').show();
@@ -949,6 +978,7 @@
         $('.dts_container').hide();
         $('.emplist_container').hide();
         $('.fingerprint_container').show();
+        ipcRenderer.send('mainfp_menu', true);
         return false; 
     })
 
@@ -957,7 +987,7 @@
         $('.emp_container').hide();
         $('.emplist_container').show();
         $('.fingerprint_container').hide();
-        ipcRenderer.send('employee_list', true);
+        ipcRenderer.send('employee_menu', true);
         return false;
     });
 
@@ -966,6 +996,7 @@
         $('.emp_container').hide();
         $('.fingerprint_container').hide();
         $('.emplist_container').hide();
+        ipcRenderer.send('dts_menu', true);
         return false;
     });
 
@@ -1018,12 +1049,158 @@
         }
     });
 
-    ipcRenderer.on('employee_list', function (event, data) {
+    ipcRenderer.on('mainfp_failed', function (event, data) {
+        toastr.error('Fingerprint with same date already exist..');
+    });
+
+    ipcRenderer.on('mainfp_finish', function (event, data) {
+        var mainfp_table = document.getElementById('fp_list_table');
+        var row = document.createElement("tr");
+        var cellDate = document.createElement("td");
+        cellDate.innerHTML = data.fp_date;
+        row.appendChild(cellDate)
+
+        var cellEntry = document.createElement("td");
+        cellEntry.innerHTML = data.fp_count;
+        row.appendChild(cellEntry)
+
+        mainfp_table.appendChild(row)
+    });
+
+    ipcRenderer.on('dts_menu', function (event, data) {
+        console.log(data)
+        var emp_id_select = document.getElementById('dts_emp_id');
+        var newOption;
         if (data.length > 0) {
+            $("#dts_emp_id > option").remove();
+            newOption = document.createElement("option");
+            newOption.innerHTML = 'Choose';
+            emp_id_select.appendChild(newOption)
             for (var i=0; i<data.length; i++) {
-                console.log(data[i])
+                empNameList.push(data[i].dataValues.employee_name)
+                newOption = document.createElement("option");
+                newOption.innerHTML = data[i].dataValues.id;
+                emp_id_select.appendChild(newOption)
             }
         }
     });
+
+    function dts_emp_id_change () {
+        var empId = $('#dts_emp_id').val();
+        $('#dts_emp_name').val(empNameList[empId-1])
+    }
+
+    ipcRenderer.on('employee_menu', function (event, data) {
+        var emp_list_table = document.getElementById('emp_list_table');
+        var row;
+        if (data.length > 0) {
+            $("#emp_list_table > tr").remove();
+            for (var i=0; i<data.length; i++) {
+                row = document.createElement("tr");
+                var cellId = document.createElement("td");
+                cellId.innerHTML = data[i].dataValues.id;
+                row.appendChild(cellId)
+
+                var cellName = document.createElement("td");
+                cellName.innerHTML = data[i].dataValues.employee_name;
+                row.appendChild(cellName)
+
+                var cellNik = document.createElement("td");
+                cellNik.innerHTML = data[i].dataValues.nik;
+                row.appendChild(cellNik)
+
+                var editImage = document.createElement('IMG');
+                editImage.setAttribute("src", "./assets/images/edit_20.png");
+                editImage.setAttribute("class", "edit-image");
+
+                var deleteImage = document.createElement('IMG');
+                deleteImage.setAttribute("src", "./assets/images/delete_20.png");
+                deleteImage.setAttribute("class", "edit-image");
+
+                row.appendChild(editImage)
+                row.appendChild(deleteImage)
+                emp_list_table.appendChild(row)
+            }
+        }
+    });
+
+    ipcRenderer.on('mainfp_menu', function (event, data) {
+        var mainfp_table = document.getElementById('fp_list_table');
+        var row = document.createElement("tr");
+        // console.log(data)
+        if (data.length > 0) {
+            $("#fp_list_table > tr").remove();
+            for (var i=0; i<data.length; i++) {
+                var cellDate = document.createElement("td");
+                // cellDate.innerHTML = data[i].dataValues.fp_date.getDate() + '-' 
+                //     + data[i].dataValues.fp_date.getMonth() + '-' + data[i].dataValues.fp_date.getFullYear();
+                cellDate.innerHTML = data[i].dataValues.fp_date.toLocaleDateString()
+                row.appendChild(cellDate)
+
+                var cellEntry = document.createElement("td");
+                cellEntry.innerHTML = data[i].dataValues.fp_count;
+                row.appendChild(cellEntry)
+            }
+            mainfp_table.appendChild(row)
+        }
+    })
+
+    function dtsFinish () {
+
+    }
+
+    function dtsSave () {
+        var newDts = {
+            employee_id: $('#dts_emp_id').val(),
+            dts_date: $('#dts_date').val(),
+            dts_start: $('#dts_start').val(),
+            dts_finish: $('#dts_finish').val(),
+            dts_job_number: $('#dts_job_number').val(),
+            dts_job_desc: $('#dts_job_desc').val(),
+            dts_workday: $('#dts_workday').val(),
+            dts_meal: $('#dts_meal').val(),
+            dts_transport: $('#dts_transport').val(),
+            dts_attendance: $('#dts_attendance').val(),
+            dts_ontime: $('#dts_ontime').val(),
+            dts_production: $('#dts_production').val(),
+            dts_housing: $('#dts_housing').val(),
+            dts_away: $('#dts_away').val()
+        }
+        ipcRenderer.send('save_dts', newDts);
+    }
+
+    ipcRenderer.on('save_dts', function (event, data) {
+        
+    })
+
+    function UploadFp () {
+        fp_date = $('#fp_date').val();
+        var main_fp = {
+            fp_json: JSON.stringify(fp_json),
+            fp_count: fp_count,
+            fp_date: fp_date
+        }
+        ipcRenderer.send('create_mainfp', main_fp);
+    }
+
+    function handleFile(e) {
+      var files = e.target.files, f = files[0];
+      // console.log(files)
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var data = new Uint8Array(e.target.result);
+        // console.log(data)
+        var workbook = XLSX.read(data, {type: 'array'});
+        // console.log(workbook)
+        fp_json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]])
+        fp_count = fp_json.length;
+
+        // console.log(fp_json)
+
+        /* DO SOMETHING WITH workbook HERE */
+      };
+      reader.readAsArrayBuffer(f);
+    }
+    document.getElementById('fp_csv').addEventListener('change', handleFile, false);
 </script>
 </html>
