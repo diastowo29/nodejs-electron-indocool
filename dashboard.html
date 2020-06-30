@@ -501,7 +501,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="#" id="salary_calculation">
                                     <i class="metismenu-icon pe-7s-car"></i>
                                     Salary Calculation
                                 </a>
@@ -624,7 +624,7 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Nama</th>
+                                        <th>Name</th>
                                         <th>NIK</th>
                                         <th>Action</th>
                                     </tr>
@@ -809,6 +809,41 @@
                             <button class="btn btn-primary" onclick="createEmployee()">Save</button>
                         </div>
                     </div>
+
+                    <div class="row sal_calc_container">
+                        <div class="col-md-3">
+                            <label>Calculation Period </label>
+                            <select class="form-control" id="calc_period">
+                                <option value="jan">January</option>
+                                <option value="feb">February</option>
+                                <option value="mar">March</option>
+                                <option value="apr">April</option>
+                                <option value="may">May</option>
+                                <option value="jun">June</option>
+                                <option value="jul">July</option>
+                                <option value="aug">August</option>
+                                <option value="sept">September</option>
+                                <option value="oct">October</option>
+                                <option value="nov">November</option>
+                                <option value="dec">December</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="label_hide">calculate</label>
+                            <input type="button" value="Calculate" class="btn btn-primary form-control" onclick="doCalculation()">
+                        </div>
+                        <div class="col-md-12">
+                            <table class="table" id="emp_list_table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Days Worked</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
                     <!-- <div class="row">
                         <div class="col-md-12">
                             <div class="main-card mb-3 card">
@@ -963,15 +998,17 @@
     var empNameList = [];
 
     $('.emp_container').hide();
-    $('.dts_container').show();
+    $('.dts_container').hide();
     $('.emplist_container').hide();
     $('.fingerprint_container').hide();
+    $('.sal_calc_container').show();
 
     $('#emp_master').click( function() {
         $('.emp_container').show();
         $('.dts_container').hide();
         $('.emplist_container').hide();
         $('.fingerprint_container').hide();
+        $('.sal_calc_container').hide();
         return false;
     });
 
@@ -980,6 +1017,7 @@
         $('.dts_container').hide();
         $('.emplist_container').hide();
         $('.fingerprint_container').show();
+        $('.sal_calc_container').hide();
         ipcRenderer.send('mainfp_menu', true);
         return false; 
     })
@@ -989,6 +1027,7 @@
         $('.emp_container').hide();
         $('.emplist_container').show();
         $('.fingerprint_container').hide();
+        $('.sal_calc_container').hide();
         ipcRenderer.send('employee_menu', true);
         return false;
     });
@@ -998,6 +1037,17 @@
         $('.emp_container').hide();
         $('.fingerprint_container').hide();
         $('.emplist_container').hide();
+        $('.sal_calc_container').hide();
+        ipcRenderer.send('dts_menu', true);
+        return false;
+    });
+
+    $('#salary_calculation').click( function() {
+        $('.dts_container').hide();
+        $('.emp_container').hide();
+        $('.fingerprint_container').hide();
+        $('.emplist_container').hide();
+        $('.sal_calc_container').show();
         ipcRenderer.send('dts_menu', true);
         return false;
     });
@@ -1009,6 +1059,11 @@
 
         }
     });
+
+    function doCalculation () {
+        let monthPeriod = $('#calc_period').val();
+        ipcRenderer.send('doCalculation', monthPeriod);
+    }
 
     function createEmployee () {
         var employeeData = {
